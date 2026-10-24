@@ -32,6 +32,12 @@ display, draggable colour-coded band nodes and a floating band control panel.
 | Right-click node | Shape, slope, stereo placement, bypass, delete |
 | Alt-click node / Delete key | Remove band |
 
+## Download
+
+Ready-to-use builds for Windows, macOS and Linux are on the
+[Releases page](https://github.com/zgodet/lumen-eq/releases/latest).
+Install instructions are included with each release.
+
 ## Building
 
 Requirements: CMake 3.22+, a C++17 compiler (Visual Studio 2022, Xcode, or GCC/Clang).
@@ -68,7 +74,8 @@ These render sine tones through the processor and check the measured gain
 against the analytic response for every filter shape, then save a UI screenshot.
 
 The included GitHub Actions workflow builds Windows, macOS (universal) and Linux
-binaries on every push and attaches them as downloadable artifacts.
+binaries on every push. Pushing a version tag (e.g. `git tag v1.0.1 && git push origin v1.0.1`)
+also publishes them as a GitHub Release.
 
 ## Code layout
 

@@ -2,6 +2,8 @@ name: Build
 
 on:
   push:
+    branches: ["**"]
+    tags: ["v*"]
   pull_request:
   workflow_dispatch:
 
@@ -10,7 +12,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        include:
+          - os: windows-latest
+            name: Windows
+          - os: macos-latest
+            name: macOS
+          - os: ubuntu-latest
+            name: Linux
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -32,10 +40,51 @@ jobs:
         if: runner.os == 'Linux'
         run: xvfb-run ./build/LumenEQTests_artefacts/Release/LumenEQTests
 
+      - name: Package
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          [[ "$GITHUB_REF_TYPE" == "tag" ]] || VERSION="dev"
+          mkdir -p dist
+          cd build/LumenEQ_artefacts/Release
+          ITEMS="VST3 Standalone"
+          [[ -d AU ]] && ITEMS="$ITEMS AU"
+          cmake -E tar cf "$GITHUB_WORKSPACE/dist/LumenEQ-${VERSION}-${{ matrix.name }}.zip" --format=zip $ITEMS
+
       - uses: actions/upload-artifact@v4
         with:
-          name: LumenEQ-${{ runner.os }}
-          path: |
-            build/LumenEQ_artefacts/Release/VST3
-            build/LumenEQ_artefacts/Release/AU
-            build/LumenEQ_artefacts/Release/Standalone
+          name: LumenEQ-${{ matrix.name }}
+          path: dist/*.zip
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Lumen EQ ${{ github.ref_name }}
+          files: dist/*.zip
+          body: |
+            Lumen EQ ${{ github.ref_name }} by GCC Labs.
+
+            **Downloads**
+            - **Windows**: `LumenEQ-${{ github.ref_name }}-Windows.zip` (VST3 + standalone)
+            - **macOS** (Apple Silicon + Intel): `LumenEQ-${{ github.ref_name }}-macOS.zip` (VST3 + AU + standalone)
+            - **Linux**: `LumenEQ-${{ github.ref_name }}-Linux.zip` (VST3 + standalone)
+
+            **Install**
+            - Windows: copy `Lumen EQ.vst3` to `C:\Program Files\Common Files\VST3`
+            - macOS: copy `Lumen EQ.vst3` to `~/Library/Audio/Plug-Ins/VST3` and `Lumen EQ.component` to `~/Library/Audio/Plug-Ins/Components`.
+              The build is not notarized, so run `xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/"Lumen EQ.vst3" ~/Library/Audio/Plug-Ins/Components/"Lumen EQ.component"` once.
+            - Linux: copy `Lumen EQ.vst3` to `~/.vst3`
+
+            Then rescan plugins in your DAW.
