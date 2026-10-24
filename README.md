@@ -1,5 +1,7 @@
 # Lumen EQ
 
+Created by [zgodet](https://github.com/zgodet).
+
 A 16-band parametric EQ plugin (VST3 / AU / Standalone) built with JUCE, with a
 workflow and look inspired by FabFilter Pro-Q: a big interactive spectrum
 display, draggable colour-coded band nodes and a floating band control panel.
@@ -79,5 +81,9 @@ binaries on every push and attaches them as downloadable artifacts.
 | `Source/BandPanel.*` | Floating per-band controls |
 | `Source/PluginEditor.*` | Window layout, top/bottom bars, output meter |
 | `Source/LookAndFeel.*`, `Source/Theme.h` | Visual styling |
+
+## Credits
+
+Created and maintained by [zgodet](https://github.com/zgodet).
 
 "FabFilter" and "Pro-Q" are trademarks of FabFilter. This is an independent project and is not affiliated with them.
