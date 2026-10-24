@@ -1,6 +1,6 @@
 # Lumen EQ
 
-Created by [zgodet](https://github.com/zgodet).
+A GCC Labs plugin, created by [zgodet](https://github.com/zgodet).
 
 A 16-band parametric EQ plugin (VST3 / AU / Standalone) built with JUCE, with a
 workflow and look inspired by FabFilter Pro-Q: a big interactive spectrum
@@ -84,6 +84,8 @@ binaries on every push and attaches them as downloadable artifacts.
 
 ## Credits
 
-Created and maintained by [zgodet](https://github.com/zgodet).
+- Created and maintained by [zgodet](https://github.com/zgodet) / GCC Labs.
+- Built with the help of [Claude](https://claude.ai), Anthropic's AI assistant.
+- Uses the [JUCE](https://juce.com) framework.
 
 "FabFilter" and "Pro-Q" are trademarks of FabFilter. This is an independent project and is not affiliated with them.

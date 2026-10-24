@@ -17,9 +17,9 @@ else()
 endif()
 
 juce_add_plugin(LumenEQ
-    COMPANY_NAME "Lumen Audio"
-    BUNDLE_ID com.lumenaudio.lumeneq
-    PLUGIN_MANUFACTURER_CODE Lmna
+    COMPANY_NAME "GCC Labs"
+    BUNDLE_ID com.gcclabs.lumeneq
+    PLUGIN_MANUFACTURER_CODE Gccl
     PLUGIN_CODE Lmeq
     FORMATS VST3 AU Standalone
     PRODUCT_NAME "Lumen EQ"
