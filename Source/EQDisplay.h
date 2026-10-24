@@ -3,7 +3,7 @@
 #include "PluginProcessor.h"
 #include "Theme.h"
 
-// The main Pro-Q style graph: spectrum analyzer, band + composite curves and
+// The main EQ graph: spectrum analyzer, band + composite curves and
 // draggable band nodes.
 class EQDisplay : public juce::Component
 {

@@ -38,7 +38,7 @@ private:
     std::vector<float> buffer = std::vector<float> ((size_t) size, 0.0f);
 };
 
-// UI-side FFT analyzer with Pro-Q style 4.5 dB/oct display tilt and ballistics.
+// UI-side FFT analyzer with a 4.5 dB/oct display tilt and ballistics.
 class Spectrum
 {
 public:

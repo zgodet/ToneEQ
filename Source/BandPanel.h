@@ -22,7 +22,7 @@ private:
     Icon icon;
 };
 
-// Floating parameter panel for the selected band (bottom-centre, Pro-Q style).
+// Floating parameter panel for the selected band (bottom-centre).
 class BandPanel : public juce::Component
 {
 public:
