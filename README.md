@@ -74,8 +74,8 @@ These render sine tones through the processor and check the measured gain
 against the analytic response for every filter shape, then save a UI screenshot.
 
 The included GitHub Actions workflow builds Windows, macOS (universal) and Linux
-binaries on every push. Pushing a version tag (e.g. `git tag v1.0.1 && git push origin v1.0.1`)
-also publishes them as a GitHub Release.
+binaries on every push. To publish a release, open **Actions → Build → Run workflow**, enter a
+version such as `v1.0.1`, and click **Run workflow** (pushing a `v*` tag works too).
 
 ## Code layout
 
