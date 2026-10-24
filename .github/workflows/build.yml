@@ -8,9 +8,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Release version to publish (e.g. v1.0.0). Leave empty for a test build only."
-        required: false
-        default: ""
+        description: "Release version to publish (e.g. v1.0.0)"
+        required: true
+        default: "v1.0.0"
 
 env:
   RELEASE_VERSION: ${{ inputs.version || (github.ref_type == 'tag' && github.ref_name) || '' }}
