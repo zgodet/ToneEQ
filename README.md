@@ -1,6 +1,6 @@
 # ToneEQ
 
-A Audemo plugin, created by [zgodet](https://github.com/zgodet).
+An Audemo plugin, created by [zgodet](https://github.com/zgodet).
 
 A 16-band parametric EQ plugin (VST3 / AU / Standalone) built with JUCE, with a
 workflow and look in the style of popular modern dynamic EQs: a big interactive spectrum
