@@ -5,13 +5,13 @@
 
 static int failures = 0;
 
-static void setP (LumenEQProcessor& p, const juce::String& id, float v)
+static void setP (ToneEQProcessor& p, const juce::String& id, float v)
 {
     auto* prm = p.apvts.getParameter (id);
     prm->setValueNotifyingHost (prm->convertTo0to1 (v));
 }
 
-static double measureGainDb (LumenEQProcessor& p, double freq, double sr)
+static double measureGainDb (ToneEQProcessor& p, double freq, double sr)
 {
     const int block = 512, blocks = 200;
     juce::AudioBuffer<float> buf (2, block);
@@ -61,7 +61,7 @@ int main (int argc, char** argv)
 
     for (const auto& c : cases)
     {
-        LumenEQProcessor p;
+        ToneEQProcessor p;
         setP (p, "b1_used", 1); setP (p, "b1_type", (float) (int) c.t); setP (p, "b1_freq", (float) c.f);
         setP (p, "b1_gain", (float) c.g); setP (p, "b1_q", (float) c.q); setP (p, "b1_slope", (float) c.slope);
         p.prepareToPlay (sr, 512);
@@ -74,13 +74,13 @@ int main (int argc, char** argv)
     check ("Analytic: LC 24 dB/oct one octave below", eq::makeDesign ({ eq::FilterType::LowCut, 100, 0, 0.7071, 3 }, sr).magnitudeDb (50, sr), -24.1, 0.3);
 
     {   // Mid/side: a side-only cut must leave a mono signal untouched.
-        LumenEQProcessor p;
+        ToneEQProcessor p;
         setP (p, "b1_used", 1); setP (p, "b1_type", 0); setP (p, "b1_freq", 1000); setP (p, "b1_gain", -12); setP (p, "b1_placement", 4);
         p.prepareToPlay (sr, 512);
         check ("Side-only bell on mono signal", measureGainDb (p, 1000, sr), 0.0, 0.05);
     }
     {   // Bypassed band and output gain.
-        LumenEQProcessor p;
+        ToneEQProcessor p;
         setP (p, "b1_used", 1); setP (p, "b1_gain", 12); setP (p, "b1_freq", 1000); setP (p, "b1_bypass", 1); setP (p, "output", -6);
         p.prepareToPlay (sr, 512);
         check ("Bypassed band + output -6 dB", measureGainDb (p, 1000, sr), -6.0, 0.05);
@@ -88,10 +88,10 @@ int main (int argc, char** argv)
 
     // Editor snapshot with a few bands.
     {
-        LumenEQProcessor p;
+        ToneEQProcessor p;
         auto band = [&] (int b, int type, float f, float g, float q, int slope = 1, int pl = 0)
         {
-            auto id = [b] (const char* n) { return LumenEQProcessor::pid (b, n); };
+            auto id = [b] (const char* n) { return ToneEQProcessor::pid (b, n); };
             setP (p, id ("used"), 1); setP (p, id ("type"), (float) type); setP (p, id ("freq"), f);
             setP (p, id ("gain"), g); setP (p, id ("q"), q); setP (p, id ("slope"), (float) slope); setP (p, id ("placement"), (float) pl);
         };
@@ -110,7 +110,7 @@ int main (int argc, char** argv)
         float b0 = 0, b1 = 0, b2 = 0;
 
         std::unique_ptr<juce::AudioProcessorEditor> ed (p.createEditor());
-        auto* editor = dynamic_cast<LumenEQEditor*> (ed.get());
+        auto* editor = dynamic_cast<ToneEQEditor*> (ed.get());
         ed->setSize (1060, 620);
         for (int frame = 0; frame < 40; ++frame)
         {

@@ -16,11 +16,11 @@ private:
     int holdFrames[2] {};
 };
 
-class LumenEQEditor : public juce::AudioProcessorEditor, private juce::Timer
+class ToneEQEditor : public juce::AudioProcessorEditor, private juce::Timer
 {
 public:
-    explicit LumenEQEditor (LumenEQProcessor&);
-    ~LumenEQEditor() override;
+    explicit ToneEQEditor (ToneEQProcessor&);
+    ~ToneEQEditor() override;
 
     void paint (juce::Graphics&) override;
     void resized() override;
@@ -31,8 +31,8 @@ private:
     void updateRangeButton();
     void navigate (int direction);
 
-    LumenEQProcessor& proc;
-    LumenLookAndFeel lnf;
+    ToneEQProcessor& proc;
+    ToneLookAndFeel lnf;
     juce::TooltipWindow tooltips { this, 600 };
 
     EQDisplay display;
@@ -48,5 +48,5 @@ private:
 
     static constexpr int topBarHeight = 38, bottomBarHeight = 34;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LumenEQEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ToneEQEditor)
 };

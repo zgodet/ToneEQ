@@ -40,7 +40,7 @@ void IconButton::paintButton (juce::Graphics& g, bool over, bool down)
 }
 
 //==============================================================================
-BandPanel::BandPanel (LumenEQProcessor& p) : proc (p)
+BandPanel::BandPanel (ToneEQProcessor& p) : proc (p)
 {
     addAndMakeVisible (power);
     power.setTooltip ("Enable / bypass band");
@@ -89,7 +89,7 @@ void BandPanel::setBand (int newBand)
     if (band < 0) return;
 
     using APVTS = juce::AudioProcessorValueTreeState;
-    auto id = [this] (const char* n) { return LumenEQProcessor::pid (band, n); };
+    auto id = [this] (const char* n) { return ToneEQProcessor::pid (band, n); };
     powerAtt     = std::make_unique<APVTS::ButtonAttachment> (proc.apvts, id ("bypass"), power);
     typeAtt      = std::make_unique<APVTS::ComboBoxAttachment> (proc.apvts, id ("type"), type);
     slopeAtt     = std::make_unique<APVTS::ComboBoxAttachment> (proc.apvts, id ("slope"), slope);
@@ -114,7 +114,7 @@ void BandPanel::setBand (int newBand)
 void BandPanel::refresh()
 {
     if (band < 0) return;
-    const auto t = (eq::FilterType) (int) proc.apvts.getRawParameterValue (LumenEQProcessor::pid (band, "type"))->load();
+    const auto t = (eq::FilterType) (int) proc.apvts.getRawParameterValue (ToneEQProcessor::pid (band, "type"))->load();
     const bool hasGain = eq::usesGain (t), hasSlope = eq::usesSlope (t);
     if (gain.isEnabled() != hasGain) gain.setEnabled (hasGain);
     if (slope.isEnabled() != hasSlope) slope.setEnabled (hasSlope);

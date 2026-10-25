@@ -13,7 +13,7 @@ juce::NormalisableRange<float> logRange (float lo, float hi)
 }
 } // namespace
 
-juce::AudioProcessorValueTreeState::ParameterLayout LumenEQProcessor::createLayout()
+juce::AudioProcessorValueTreeState::ParameterLayout ToneEQProcessor::createLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
 
@@ -63,11 +63,11 @@ juce::AudioProcessorValueTreeState::ParameterLayout LumenEQProcessor::createLayo
     return layout;
 }
 
-LumenEQProcessor::LumenEQProcessor()
+ToneEQProcessor::ToneEQProcessor()
     : AudioProcessor (BusesProperties()
                           .withInput ("Input", juce::AudioChannelSet::stereo(), true)
                           .withOutput ("Output", juce::AudioChannelSet::stereo(), true)),
-      apvts (*this, nullptr, "LumenEQ", createLayout())
+      apvts (*this, nullptr, "ToneEQ", createLayout())
 {
     for (int b = 0; b < numBands; ++b)
     {
@@ -84,7 +84,7 @@ LumenEQProcessor::LumenEQProcessor()
     outputGainParam = apvts.getRawParameterValue ("output");
 }
 
-bool LumenEQProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool ToneEQProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
     const auto out = layouts.getMainOutputChannelSet();
     if (out != juce::AudioChannelSet::mono() && out != juce::AudioChannelSet::stereo())
@@ -93,7 +93,7 @@ bool LumenEQProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 }
 
 //==============================================================================
-void LumenEQProcessor::Band::reset (double sampleRate)
+void ToneEQProcessor::Band::reset (double sampleRate)
 {
     freq.reset (sampleRate, 0.04);
     q.reset (sampleRate, 0.04);
@@ -109,7 +109,7 @@ void LumenEQProcessor::Band::reset (double sampleRate)
     dirty = true;
 }
 
-void LumenEQProcessor::Band::updateTargets()
+void ToneEQProcessor::Band::updateTargets()
 {
     const int t = (int) type->load(), s = (int) slope->load(), p = (int) placement->load();
     if (t != curType || s != curSlope || p != curPlacement)
@@ -127,7 +127,7 @@ void LumenEQProcessor::Band::updateTargets()
     mix.setTargetValue (used->load() > 0.5f && bypass->load() < 0.5f ? 1.0f : 0.0f);
 }
 
-void LumenEQProcessor::Band::prepareSegment (int len, double sampleRate)
+void ToneEQProcessor::Band::prepareSegment (int len, double sampleRate)
 {
     const bool smoothing = freq.isSmoothing() || q.isSmoothing() || gain.isSmoothing();
     freq.skip (len);
@@ -159,7 +159,7 @@ void LumenEQProcessor::Band::prepareSegment (int len, double sampleRate)
     }
 }
 
-void LumenEQProcessor::Band::run (float* data, int channel, int len)
+void ToneEQProcessor::Band::run (float* data, int channel, int len)
 {
     auto& st = z[channel];
     const int ns = design.numSections;
@@ -184,7 +184,7 @@ void LumenEQProcessor::Band::run (float* data, int channel, int len)
 }
 
 //==============================================================================
-void LumenEQProcessor::prepareToPlay (double sampleRate, int)
+void ToneEQProcessor::prepareToPlay (double sampleRate, int)
 {
     currentSampleRate = sampleRate;
     sampleRateForUi = sampleRate;
@@ -198,7 +198,7 @@ void LumenEQProcessor::prepareToPlay (double sampleRate, int)
     outputGain.setCurrentAndTargetValue (juce::Decibels::decibelsToGain (outputGainParam->load()));
 }
 
-void LumenEQProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
+void ToneEQProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
 {
     juce::ScopedNoDenormals noDenormals;
 
@@ -294,19 +294,19 @@ void LumenEQProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Mid
 }
 
 //==============================================================================
-juce::AudioProcessorEditor* LumenEQProcessor::createEditor()
+juce::AudioProcessorEditor* ToneEQProcessor::createEditor()
 {
-    return new LumenEQEditor (*this);
+    return new ToneEQEditor (*this);
 }
 
-void LumenEQProcessor::getStateInformation (juce::MemoryBlock& destData)
+void ToneEQProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     auto state = apvts.copyState();
     if (auto xml = state.createXml())
         copyXmlToBinary (*xml, destData);
 }
 
-void LumenEQProcessor::setStateInformation (const void* data, int sizeInBytes)
+void ToneEQProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     if (auto xml = getXmlFromBinary (data, sizeInBytes))
         if (xml->hasTagName (apvts.state.getType()))
@@ -315,5 +315,5 @@ void LumenEQProcessor::setStateInformation (const void* data, int sizeInBytes)
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new LumenEQProcessor();
+    return new ToneEQProcessor();
 }

@@ -1,12 +1,12 @@
-# Lumen EQ
+# ToneEQ
 
-A GCC Labs plugin, created by [zgodet](https://github.com/zgodet).
+A Audemo plugin, created by [zgodet](https://github.com/zgodet).
 
 A 16-band parametric EQ plugin (VST3 / AU / Standalone) built with JUCE, with a
 workflow and look in the style of popular modern dynamic EQs: a big interactive spectrum
 display, draggable colour-coded band nodes and a floating band control panel.
 
-![Lumen EQ](docs/screenshot.png)
+![ToneEQ](docs/screenshot.png)
 
 ## Features
 
@@ -48,8 +48,8 @@ cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 ```
 
-Plugins are written to `build/LumenEQ_artefacts/Release/` (`VST3/Lumen EQ.vst3`,
-`AU/Lumen EQ.component` on macOS, and a standalone app). Copy the `.vst3`
+Plugins are written to `build/ToneEQ_artefacts/Release/` (`VST3/ToneEQ.vst3`,
+`AU/ToneEQ.component` on macOS, and a standalone app). Copy the `.vst3`
 into your plugin folder:
 
 - Windows: `C:\Program Files\Common Files\VST3`
@@ -66,8 +66,8 @@ sudo apt install libasound2-dev libx11-dev libxrandr-dev libxinerama-dev libxcur
 ### Tests
 
 ```bash
-cmake -B build -DLUMEN_BUILD_TESTS=ON && cmake --build build --target LumenEQTests
-./build/LumenEQTests_artefacts/Release/LumenEQTests docs/screenshot.png
+cmake -B build -DTONEEQ_BUILD_TESTS=ON && cmake --build build --target ToneEQTests
+./build/ToneEQTests_artefacts/Release/ToneEQTests docs/screenshot.png
 ```
 
 These render sine tones through the processor and check the measured gain
@@ -91,6 +91,6 @@ version such as `v1.0.1`, and click **Run workflow** (pushing a `v*` tag works t
 
 ## Credits
 
-- Created and maintained by [zgodet](https://github.com/zgodet) / GCC Labs.
+- Created and maintained by [zgodet](https://github.com/zgodet) / Audemo.
 - Built with the help of [Claude](https://claude.ai), Anthropic's AI assistant.
 - Uses the [JUCE](https://juce.com) framework.

@@ -8,7 +8,7 @@
 class EQDisplay : public juce::Component
 {
 public:
-    explicit EQDisplay (LumenEQProcessor&);
+    explicit EQDisplay (ToneEQProcessor&);
 
     void tick(); // call from a ~60 Hz timer
     void paint (juce::Graphics&) override;
@@ -35,7 +35,7 @@ public:
     static constexpr double minFreq = 10.0, maxFreq = 30000.0;
 
 private:
-    static constexpr int N = LumenEQProcessor::numBands;
+    static constexpr int N = ToneEQProcessor::numBands;
 
     struct BandView
     {
@@ -70,7 +70,7 @@ private:
     double yToDb (float y) const;
     float specToY (float db) const;
 
-    LumenEQProcessor& proc;
+    ToneEQProcessor& proc;
 
     float range = 12.0f;
     int analyzerMode = 0;

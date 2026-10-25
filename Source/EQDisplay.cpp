@@ -1,7 +1,7 @@
 #include "EQDisplay.h"
 #include "Format.h"
 
-EQDisplay::EQDisplay (LumenEQProcessor& p) : proc (p)
+EQDisplay::EQDisplay (ToneEQProcessor& p) : proc (p)
 {
     setWantsKeyboardFocus (true);
     setRepaintsOnMouseActivity (false);
@@ -42,7 +42,7 @@ float EQDisplay::specToY (float db) const
 //==============================================================================
 EQDisplay::BandView EQDisplay::readBand (int b) const
 {
-    auto get = [this, b] (const char* n) { return proc.apvts.getRawParameterValue (LumenEQProcessor::pid (b, n))->load(); };
+    auto get = [this, b] (const char* n) { return proc.apvts.getRawParameterValue (ToneEQProcessor::pid (b, n))->load(); };
     BandView v;
     v.used = get ("used") > 0.5f;
     v.bypass = get ("bypass") > 0.5f;
@@ -57,13 +57,13 @@ EQDisplay::BandView EQDisplay::readBand (int b) const
 
 void EQDisplay::setParamNoGesture (int band, const juce::String& name, float value)
 {
-    if (auto* p = proc.apvts.getParameter (LumenEQProcessor::pid (band, name)))
+    if (auto* p = proc.apvts.getParameter (ToneEQProcessor::pid (band, name)))
         p->setValueNotifyingHost (p->convertTo0to1 (value));
 }
 
 void EQDisplay::setParam (int band, const juce::String& name, float value)
 {
-    if (auto* p = proc.apvts.getParameter (LumenEQProcessor::pid (band, name)))
+    if (auto* p = proc.apvts.getParameter (ToneEQProcessor::pid (band, name)))
     {
         p->beginChangeGesture();
         p->setValueNotifyingHost (p->convertTo0to1 (value));
@@ -201,7 +201,7 @@ int EQDisplay::createBand (double freq, double gain)
 {
     int band = -1;
     for (int b = 0; b < N; ++b)
-        if (proc.apvts.getRawParameterValue (LumenEQProcessor::pid (b, "used"))->load() < 0.5f) { band = b; break; }
+        if (proc.apvts.getRawParameterValue (ToneEQProcessor::pid (b, "used"))->load() < 0.5f) { band = b; break; }
     if (band < 0) return -1;
 
     auto type = eq::FilterType::Bell;
@@ -233,7 +233,7 @@ void EQDisplay::beginDrag (int b, juce::Point<float> mouse)
     dragStartQ = views[(size_t) b].q;
 
     for (auto* n : { "freq", "gain", "q" })
-        if (auto* p = proc.apvts.getParameter (LumenEQProcessor::pid (b, n)))
+        if (auto* p = proc.apvts.getParameter (ToneEQProcessor::pid (b, n)))
             p->beginChangeGesture();
 }
 
@@ -314,7 +314,7 @@ void EQDisplay::mouseUp (const juce::MouseEvent& e)
     if (dragBand >= 0)
     {
         for (auto* n : { "freq", "gain", "q" })
-            if (auto* p = proc.apvts.getParameter (LumenEQProcessor::pid (dragBand, n)))
+            if (auto* p = proc.apvts.getParameter (ToneEQProcessor::pid (dragBand, n)))
                 p->endChangeGesture();
         dragBand = -1;
     }

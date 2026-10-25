@@ -4,7 +4,7 @@
 #include "Analyzer.h"
 #include "EQMath.h"
 
-class LumenEQProcessor : public juce::AudioProcessor
+class ToneEQProcessor : public juce::AudioProcessor
 {
 public:
     static constexpr int numBands = 16;
@@ -14,8 +14,8 @@ public:
         return "b" + juce::String (band + 1) + "_" + name;
     }
 
-    LumenEQProcessor();
-    ~LumenEQProcessor() override = default;
+    ToneEQProcessor();
+    ~ToneEQProcessor() override = default;
 
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override {}
@@ -81,5 +81,5 @@ private:
     juce::SmoothedValue<float> outputGain;
     double currentSampleRate = 44100.0;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LumenEQProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ToneEQProcessor)
 };

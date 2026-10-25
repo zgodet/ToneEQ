@@ -26,7 +26,7 @@ private:
 class BandPanel : public juce::Component
 {
 public:
-    explicit BandPanel (LumenEQProcessor&);
+    explicit BandPanel (ToneEQProcessor&);
 
     void setBand (int band);
     int getBand() const { return band; }
@@ -41,7 +41,7 @@ public:
     static constexpr int panelWidth = 600, panelHeight = 118;
 
 private:
-    LumenEQProcessor& proc;
+    ToneEQProcessor& proc;
     int band = -1;
 
     PowerButton power;

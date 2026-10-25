@@ -48,7 +48,7 @@ void LevelMeter::paint (juce::Graphics& g)
 }
 
 //==============================================================================
-LumenEQEditor::LumenEQEditor (LumenEQProcessor& p)
+ToneEQEditor::ToneEQEditor (ToneEQProcessor& p)
     : AudioProcessorEditor (&p), proc (p), display (p), panel (p)
 {
     setLookAndFeel (&lnf);
@@ -100,8 +100,8 @@ LumenEQEditor::LumenEQEditor (LumenEQProcessor& p)
     resetButton.onClick = [this]
     {
         display.setSelectedBand (-1);
-        for (int b = 0; b < LumenEQProcessor::numBands; ++b)
-            if (auto* prm = proc.apvts.getParameter (LumenEQProcessor::pid (b, "used")))
+        for (int b = 0; b < ToneEQProcessor::numBands; ++b)
+            if (auto* prm = proc.apvts.getParameter (ToneEQProcessor::pid (b, "used")))
             {
                 prm->beginChangeGesture();
                 prm->setValueNotifyingHost (0.0f);
@@ -128,31 +128,31 @@ LumenEQEditor::LumenEQEditor (LumenEQProcessor& p)
     startTimerHz (60);
 }
 
-LumenEQEditor::~LumenEQEditor()
+ToneEQEditor::~ToneEQEditor()
 {
     stopTimer();
     tooltips.setLookAndFeel (nullptr);
     setLookAndFeel (nullptr);
 }
 
-void LumenEQEditor::updateAnalyzerButton()
+void ToneEQEditor::updateAnalyzerButton()
 {
     analyzerButton.setButtonText (juce::String ("Analyzer: ") + analyzerNames[analyzerMode]);
 }
 
-void LumenEQEditor::updateRangeButton()
+void ToneEQEditor::updateRangeButton()
 {
     rangeButton.setButtonText ("Range: " + juce::String ((int) rangeOptions[rangeIndex]) + " dB");
 }
 
-void LumenEQEditor::navigate (int direction)
+void ToneEQEditor::navigate (int direction)
 {
-    const int n = LumenEQProcessor::numBands;
+    const int n = ToneEQProcessor::numBands;
     const int start = display.getSelectedBand();
     for (int i = 1; i <= n; ++i)
     {
         const int b = ((start + direction * i) % n + n) % n;
-        if (proc.apvts.getRawParameterValue (LumenEQProcessor::pid (b, "used"))->load() > 0.5f)
+        if (proc.apvts.getRawParameterValue (ToneEQProcessor::pid (b, "used"))->load() > 0.5f)
         {
             display.setSelectedBand (b);
             return;
@@ -160,14 +160,14 @@ void LumenEQEditor::navigate (int direction)
     }
 }
 
-void LumenEQEditor::timerCallback()
+void ToneEQEditor::timerCallback()
 {
     display.tick();
     panel.refresh();
     meter.setPeaks (proc.peakLeft.exchange (0.0f), proc.peakRight.exchange (0.0f));
 }
 
-void LumenEQEditor::paint (juce::Graphics& g)
+void ToneEQEditor::paint (juce::Graphics& g)
 {
     g.fillAll (theme::background);
 
@@ -189,9 +189,10 @@ void LumenEQEditor::paint (juce::Graphics& g)
 
     g.setFont (theme::font (17.0f, true));
     g.setColour (theme::text);
-    g.drawText ("LUMEN", logo.withTrimmedLeft (32.0f), juce::Justification::centredLeft);
+    g.drawText ("TONE", logo.withTrimmedLeft (32.0f), juce::Justification::centredLeft);
+    const float nameWidth = (float) juce::GlyphArrangement::getStringWidthInt (g.getCurrentFont(), "TONE");
     g.setColour (theme::accent);
-    g.drawText ("EQ", logo.withTrimmedLeft (92.0f), juce::Justification::centredLeft);
+    g.drawText ("EQ", logo.withTrimmedLeft (32.0f + nameWidth + 6.0f), juce::Justification::centredLeft);
 
     auto bottom = getLocalBounds().removeFromBottom (bottomBarHeight);
     g.setColour (theme::bar);
@@ -205,7 +206,7 @@ void LumenEQEditor::paint (juce::Graphics& g)
                 bottom.reduced (320, 0), juce::Justification::centred);
 }
 
-void LumenEQEditor::resized()
+void ToneEQEditor::resized()
 {
     auto r = getLocalBounds();
     auto top = r.removeFromTop (topBarHeight).reduced (10, 6);

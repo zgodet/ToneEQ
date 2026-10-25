@@ -2,10 +2,10 @@
 
 #include "Theme.h"
 
-class LumenLookAndFeel : public juce::LookAndFeel_V4
+class ToneLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
-    LumenLookAndFeel();
+    ToneLookAndFeel();
 
     void drawRotarySlider (juce::Graphics&, int x, int y, int w, int h, float pos,
                            float startAngle, float endAngle, juce::Slider&) override;

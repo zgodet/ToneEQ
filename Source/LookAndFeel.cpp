@@ -1,6 +1,6 @@
 #include "LookAndFeel.h"
 
-LumenLookAndFeel::LumenLookAndFeel()
+ToneLookAndFeel::ToneLookAndFeel()
 {
     setColour (juce::ResizableWindow::backgroundColourId, theme::background);
     setColour (juce::ComboBox::backgroundColourId, theme::control);
@@ -28,7 +28,7 @@ LumenLookAndFeel::LumenLookAndFeel()
     setColour (juce::TooltipWindow::textColourId, theme::text);
 }
 
-void LumenLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w, int h, float pos,
+void ToneLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w, int h, float pos,
                                          float startAngle, float endAngle, juce::Slider& slider)
 {
     const float size = (float) juce::jmin (w, h);
@@ -66,7 +66,7 @@ void LumenLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w,
     g.fillPath (pointer, juce::AffineTransform::rotation (angle).translated (cx, cy));
 }
 
-void LumenLookAndFeel::drawLinearSlider (juce::Graphics& g, int x, int y, int w, int h, float sliderPos, float,
+void ToneLookAndFeel::drawLinearSlider (juce::Graphics& g, int x, int y, int w, int h, float sliderPos, float,
                                          float, juce::Slider::SliderStyle style, juce::Slider& slider)
 {
     if (style != juce::Slider::LinearHorizontal)
@@ -88,7 +88,7 @@ void LumenLookAndFeel::drawLinearSlider (juce::Graphics& g, int x, int y, int w,
     g.fillEllipse (sliderPos - 5.0f, cy - 5.0f, 10.0f, 10.0f);
 }
 
-void LumenLookAndFeel::drawComboBox (juce::Graphics& g, int w, int h, bool, int, int, int, int, juce::ComboBox& box)
+void ToneLookAndFeel::drawComboBox (juce::Graphics& g, int w, int h, bool, int, int, int, int, juce::ComboBox& box)
 {
     const auto r = juce::Rectangle<float> (0, 0, (float) w, (float) h).reduced (0.5f);
     g.setColour (box.findColour (juce::ComboBox::backgroundColourId));
@@ -105,13 +105,13 @@ void LumenLookAndFeel::drawComboBox (juce::Graphics& g, int w, int h, bool, int,
     g.strokePath (arrow, juce::PathStrokeType (1.5f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
 }
 
-void LumenLookAndFeel::positionComboBoxText (juce::ComboBox& box, juce::Label& label)
+void ToneLookAndFeel::positionComboBoxText (juce::ComboBox& box, juce::Label& label)
 {
     label.setBounds (4, 0, box.getWidth() - 22, box.getHeight());
     label.setFont (getComboBoxFont (box));
 }
 
-void LumenLookAndFeel::drawButtonBackground (juce::Graphics& g, juce::Button& b, const juce::Colour&, bool over, bool down)
+void ToneLookAndFeel::drawButtonBackground (juce::Graphics& g, juce::Button& b, const juce::Colour&, bool over, bool down)
 {
     const auto r = b.getLocalBounds().toFloat().reduced (0.5f);
     auto bg = b.getToggleState() ? findColour (juce::TextButton::buttonOnColourId) : findColour (juce::TextButton::buttonColourId);
@@ -123,14 +123,14 @@ void LumenLookAndFeel::drawButtonBackground (juce::Graphics& g, juce::Button& b,
     g.drawRoundedRectangle (r, 4.0f, 1.0f);
 }
 
-void LumenLookAndFeel::drawPopupMenuBackground (juce::Graphics& g, int w, int h)
+void ToneLookAndFeel::drawPopupMenuBackground (juce::Graphics& g, int w, int h)
 {
     g.fillAll (findColour (juce::PopupMenu::backgroundColourId));
     g.setColour (theme::border);
     g.drawRect (0, 0, w, h);
 }
 
-juce::Label* LumenLookAndFeel::createSliderTextBox (juce::Slider& s)
+juce::Label* ToneLookAndFeel::createSliderTextBox (juce::Slider& s)
 {
     auto* l = LookAndFeel_V4::createSliderTextBox (s);
     l->setFont (theme::font (12.5f));
